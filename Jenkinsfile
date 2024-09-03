@@ -17,8 +17,8 @@ pipeline {
                         
                         // Install NGINX
                         sh '''
-                        apt-get update
-                        apt-get install -y nginx
+                        sudo apt-get update
+                        sudo apt-get install -y nginx
                         '''
                         
                         // Backup existing NGINX configuration
