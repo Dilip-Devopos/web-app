@@ -12,16 +12,16 @@ pipeline {
                 script {
                     // Stop any existing HTTP server
                     sh '''
-                    if pgrep -f "python3 -m http.server 8000" > /dev/null; then
+                    if pgrep -f "python3 -m http.server 9000" > /dev/null; then
                         echo "Stopping existing HTTP server..."
-                        pkill -f "python3 -m http.server 8000"
+                        pkill -f "python3 -m http.server 9000"
                     fi
                     '''
 
                     // Start the HTTP server
                     sh '''
                     echo "Starting new HTTP server..."
-                    python3 -m http.server 8000 &
+                    python3 -m http.server 9000 &
                     '''
                 }
             }
