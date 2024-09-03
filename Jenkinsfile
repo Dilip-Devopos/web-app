@@ -12,7 +12,6 @@ pipeline {
                 script {
                     // Navigate to the web-app directory and stop any existing HTTP server
                     sh '''
-                    cd web-app
                     if pgrep -f "python3 -m http.server 9000" > /dev/null; then
                         echo "Stopping existing HTTP server..."
                         pkill -f "python3 -m http.server 9000"
