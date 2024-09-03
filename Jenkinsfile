@@ -23,7 +23,7 @@ pipeline {
                         
                         // Backup existing NGINX configuration
                         sh '''
-                        mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+                        sudo mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
                         '''
                         
                         // Create a new NGINX configuration file
@@ -43,7 +43,7 @@ pipeline {
                         
                         // Start NGINX
                         sh '''
-                        systemctl start nginx
+                        sudo systemctl start nginx
                         '''
                     } else {
                         echo 'NGINX is already running. Skipping installation.'
@@ -56,12 +56,12 @@ pipeline {
                 script {
                     // Copy the HTML file to NGINX's web root directory
                     sh '''
-                    cp -r * /var/www/html/
+                    sudo cp -r * /var/www/html/
                     '''
                     
                     // Restart NGINX to apply the changes
                     sh '''
-                    systemctl restart nginx
+                    sudo systemctl restart nginx
                     '''
                 }
             }
