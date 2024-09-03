@@ -10,22 +10,21 @@ pipeline {
         stage('Stop and Start Service') {
             steps {
                 script {
-                    // Navigate to the web-app directory
-                    dir('web-app') {
-                        // Stop any existing HTTP server
-                        sh '''
-                        if pgrep -f "python3 -m http.server 9000" > /dev/null; then
-                            echo "Stopping existing HTTP server..."
-                            pkill -f "python3 -m http.server 9000"
-                        fi
-                        '''
+                    // Navigate to the web-app directory and stop any existing HTTP server
+                    sh '''
+                    cd web-app
+                    if pgrep -f "python3 -m http.server 9000" > /dev/null; then
+                        echo "Stopping existing HTTP server..."
+                        pkill -f "python3 -m http.server 9000"
+                    fi
+                    '''
 
-                        // Start the HTTP server
-                        sh '''
-                        echo "Starting new HTTP server..."
-                        python3 -m http.server 9000 &
-                        '''
-                    }
+                    // Start the HTTP server in the background
+                    sh '''
+                    cd web-app
+                    echo "Starting new HTTP server..."
+                    nohup python3 -m http.server 9000 > server.log 2>&1 &
+                    '''
                 }
             }
         }
