@@ -17,13 +17,13 @@ pipeline {
                         
                         // Install NGINX
                         sh '''
-                        sudo apt-get update
-                        sudo apt-get install -y nginx
+                        apt-get update
+                        apt-get install -y nginx
                         '''
                         
                         // Backup existing NGINX configuration
                         sh '''
-                        sudo mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+                        mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
                         '''
                         
                         // Create a new NGINX configuration file
@@ -43,7 +43,7 @@ pipeline {
                         
                         // Start NGINX
                         sh '''
-                        sudo systemctl start nginx
+                        systemctl start nginx
                         '''
                     } else {
                         echo 'NGINX is already running. Skipping installation.'
@@ -56,12 +56,12 @@ pipeline {
                 script {
                     // Copy the HTML file to NGINX's web root directory
                     sh '''
-                    sudo cp -r * /var/www/html/
+                    cp -r * /var/www/html/
                     '''
                     
                     // Restart NGINX to apply the changes
                     sh '''
-                    sudo systemctl restart nginx
+                    systemctl restart nginx
                     '''
                 }
             }
