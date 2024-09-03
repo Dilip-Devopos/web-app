@@ -20,7 +20,6 @@ pipeline {
 
                     // Start the HTTP server in the background
                     sh '''
-                    cd web-app
                     echo "Starting new HTTP server..."
                     python3 -m http.server 9000 &
                     '''
