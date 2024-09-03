@@ -4,17 +4,25 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Clone the specified branch from the repository
-                git branch: 'your-branch-name', url: 'https://github.com/your-username/your-repo.git'
+                git branch: 'main', url: 'https://github.com/Dilip-Devopos/web-app.git'
             }
         }
-        stage('Navigate and Run Python Script') {
+        stage('Stop and Start Service') {
             steps {
                 script {
-                    // Navigate to the specified directory
-                    dir('your-directory') {
-                        // Run the Python script
-                        sh 'python3 your-script.py'
-                    }
+                    // Stop any existing HTTP server
+                    sh '''
+                    if pgrep -f "python3 -m http.server 8000" > /dev/null; then
+                        echo "Stopping existing HTTP server..."
+                        pkill -f "python3 -m http.server 8000"
+                    fi
+                    '''
+
+                    // Start the HTTP server
+                    sh '''
+                    echo "Starting new HTTP server..."
+                    python3 -m http.server 8000 &
+                    '''
                 }
             }
         }
