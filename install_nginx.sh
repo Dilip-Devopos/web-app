@@ -7,56 +7,28 @@ EXTRACT_DIR="/tmp/deployment-package"
 HTML_FILE="index.html"
 NGINX_HTML_DIR="/var/www/html"
 
-# Function to check if NGINX is installed and install if not
-install_nginx() {
-    if systemctl status nginx &>/dev/null; then
-        echo "NGINX is already installed."
-    else
-        echo "Installing NGINX..."
-        sudo apt update
-        sudo apt install -y nginx
-    fi
-}
-
-# Function to check if AWS CLI is installed and install if not
-install_aws_cli() {
-    if ! command -v aws &>/dev/null; then
-        echo "AWS CLI not found. Installing AWS CLI..."
-        sudo apt update
-        sudo apt install -y curl unzip
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip awscliv2.zip
-        sudo ./aws/install
-    fi
-}
-
-# Function to configure AWS CLI with credentials from Jenkins
-configure_aws_cli() {
-    # Assuming AWS credentials are configured as environment variables by Jenkins
-    if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
-        echo "AWS credentials are not set."
-        exit 1
-    fi
-    aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
-    aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
-    aws configure set region "$AWS_REGION"
-}
-
-# Main script execution
-echo "Starting deployment script..."
-
-# Install NGINX
-install_nginx
+# Check if NGINX is already installed
+if systemctl status nginx &>/dev/null; then
+    echo "NGINX is already installed."
+else
+    echo "Installing NGINX..."
+    sudo apt update
+    sudo apt install -y nginx
+fi
 
 # Stop NGINX before updating content
 echo "Stopping NGINX server..."
 sudo systemctl stop nginx
 
-# Install AWS CLI if not installed
-install_aws_cli
-
-# Configure AWS CLI
-configure_aws_cli
+# Check if AWS CLI is installed
+if ! command -v aws &>/dev/null; then
+    echo "AWS CLI not found. Installing AWS CLI..."
+    sudo apt update
+    sudo apt install -y curl unzip
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
+fi
 
 # Download the zip file from S3
 echo "Downloading zip file from S3..."
