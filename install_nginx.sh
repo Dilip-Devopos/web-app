@@ -24,6 +24,8 @@ sudo systemctl stop nginx
 # Check if AWS CLI is installed
 if ! command -v aws &>/dev/null; then
     echo "AWS CLI not found. Installing AWS CLI..."
+    sudo apt update
+    sudo apt install -y unzip curl
     curl "https://d1uj6qtbmh3dt5.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     unzip awscliv2.zip
     sudo ./aws/install
@@ -49,7 +51,7 @@ fi
 
 # Update the HTML file
 echo "Updating HTML file..."
-sudo cp -r $EXTRACT_DIR/$HTML_FILE $NGINX_HTML_DIR/$HTML_FILE
+sudo cp $EXTRACT_DIR/$HTML_FILE $NGINX_HTML_DIR/$HTML_FILE
 
 # Clean up
 echo "Cleaning up temporary files..."
