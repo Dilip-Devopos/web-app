@@ -37,20 +37,13 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 script {
-                    // Ensure the SSH key is properly configured
                     sh 'chmod 600 test.pem'
-                    
-                    // Create the .ssh directory if it doesn't exist
                     sh 'mkdir -p ~/.ssh'
-                    
-                    // Add EC2 host key to known_hosts
                     sh "ssh-keyscan -H ${EC2_IP} >> ~/.ssh/known_hosts"
 
                     sh """
                     # Upload the deployment package to EC2 instance
                     scp -i test.pem ${DEPLOYMENT_PACKAGE} ${SSH_USER}@${EC2_IP}:~
-
-                    # Upload the install script
                     scp -i test.pem install_nginx.sh ${SSH_USER}@${EC2_IP}:~
 
                     # Connect to the EC2 instance and run the install script
