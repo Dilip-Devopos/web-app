@@ -6,7 +6,7 @@ ZIP_FILE="deployment-package.zip"
 EXTRACT_DIR="/tmp/deployment-package"
 HTML_FILE="index.html"
 NGINX_HTML_DIR="/var/www/html"
-AWS_PROFILE="default"  # Change if you use a different AWS profile
+AWS_PROFILE="default"
 
 # Check if NGINX is already installed
 if systemctl status nginx &>/dev/null; then
