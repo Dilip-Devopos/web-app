@@ -39,6 +39,9 @@ pipeline {
                 script {
                     // Ensure the SSH key is properly configured
                     sh 'chmod 600 test.pem'
+                    
+                    // Add EC2 host key to known_hosts
+                    sh "ssh-keyscan -H ${EC2_IP} >> ~/.ssh/known_hosts"
 
                     sh """
                     # Upload the deployment package to EC2 instance
