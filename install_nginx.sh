@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Set variables
+# Set variable
 S3_BUCKET="dilip-bucket-14"
 ZIP_FILE="deployment-package.zip"
 EXTRACT_DIR="/tmp/deployment-package"
