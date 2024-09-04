@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# Set AWS credentials from Jenkins environment variables
-export AWS_ACCESS_KEY_ID="${ACCESS_KEY}"
-export AWS_SECRET_ACCESS_KEY="${SECRET_ACCESS_KEY}"
-export AWS_DEFAULT_REGION="ap-south-1"
-
 # Set variables
 S3_BUCKET="dilip-bucket-14"
 ZIP_FILE="deployment-package.zip"
