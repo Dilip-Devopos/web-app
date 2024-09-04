@@ -23,7 +23,7 @@ pipeline {
                                   deploymentGroupName: 'WebAppDeploymentGroup', 
                                   deploymentConfigName: 'CodeDeployDefault.AllAtOnce', 
                                   s3Location: [
-                                      bucket: 'Asia Pacific (Mumbai) ap-south-1', 
+                                      bucket: 'dilip-bucket-14', 
                                       key: 'deployment-package.zip', 
                                       bundleType: 'zip'
                                   ]
