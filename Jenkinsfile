@@ -14,6 +14,7 @@ pipeline {
                 archiveArtifacts artifacts: 'deployment-package.zip', fingerprint: true
             }
         }
+        
         stage('Deploy to AWS') {
             steps {
                 withAWS(region: 'ap-south-1', credentials: '38767c2c-c68b-47ac-a6f1-5aa4630f8352') {
