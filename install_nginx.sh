@@ -1,23 +1,23 @@
 #!/bin/bash
 
-# Update the package list
-echo "Updating package list..."
-sudo apt-get update -y
+# Check if NGINX is already installed
+if systemctl status nginx &>/dev/null; then
+    echo "NGINX is already installed."
+else
+    echo "Installing NGINX..."
+    sudo apt update
+    sudo apt install -y nginx
+fi
 
-# Install NGINX
-echo "Installing NGINX..."
-sudo apt-get install nginx -y
+# Stop NGINX before updating content
+echo "Stopping NGINX server..."
+sudo systemctl stop nginx
 
-# Start the NGINX service
-echo "Starting NGINX service..."
+# Update the HTML file
+sudo cp /tmp/index.html /var/www/html/index.html
+
+# Start NGINX after updating content
+echo "Starting NGINX server..."
 sudo systemctl start nginx
 
-# Enable NGINX to start on boot
-echo "Enabling NGINX to start on boot..."
-sudo systemctl enable nginx
-
-# Verify NGINX installation
-echo "Checking NGINX status..."
-sudo systemctl status nginx
-
-echo "NGINX installation completed."
+echo "Deployment Complete!"
