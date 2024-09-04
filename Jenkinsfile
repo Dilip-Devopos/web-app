@@ -6,7 +6,7 @@ pipeline {
         S3_BUCKET = 'dilip-bucket-14'
         DEPLOYMENT_PACKAGE = 'deployment-package.zip'
         S3_OBJECT = "s3://${S3_BUCKET}/${DEPLOYMENT_PACKAGE}"
-        EC2_IP = '13.232.35.205'
+        EC2_IP = '13.201.89.249'
         SSH_USER = 'ubuntu'
     }
 
