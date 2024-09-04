@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Set AWS credentials (if not using IAM roles)
-export AWS_ACCESS_KEY_ID='c4de8d53-50b7-4316-87ea-203ac6bed6d1'
-export AWS_SECRET_ACCESS_KEY='7c954e56-40c1-4f61-a409-1ea8edbe667c'
+# Set AWS credentials from Jenkins environment variables
+export AWS_ACCESS_KEY_ID="${ACCESS_KEY}"
+export AWS_SECRET_ACCESS_KEY="${SECRET_ACCESS_KEY}"
 export AWS_DEFAULT_REGION="ap-south-1"
 
 # Set variables
