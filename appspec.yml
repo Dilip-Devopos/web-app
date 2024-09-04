@@ -1,0 +1,9 @@
+version: 0.0
+os: linux
+files:
+  - source: /index.html
+    destination: /tmp/index.html
+hooks:
+  AfterInstall:
+    - location: install_nginx.sh
+      runas: root
