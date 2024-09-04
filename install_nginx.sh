@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# Check if AWS CLI is installed
-if ! command -v aws &> /dev/null; then
-    echo "AWS CLI not found. Installing AWS CLI..."
-    sudo apt update
-    sudo apt install -y awscli
-fi
+# Set variables
+S3_BUCKET="dilip-bucket-14"
+ZIP_FILE="deployment-package.zip"
+EXTRACT_DIR="/tmp/deployment-package"
+HTML_FILE="index.html"
+NGINX_HTML_DIR="/var/www/html"
+AWS_PROFILE="default"  # Change if you use a different AWS profile
 
 # Check if NGINX is already installed
 if systemctl status nginx &>/dev/null; then
@@ -20,6 +21,14 @@ fi
 echo "Stopping NGINX server..."
 sudo systemctl stop nginx
 
+# Check if AWS CLI is installed
+if ! command -v aws &>/dev/null; then
+    echo "AWS CLI not found. Installing AWS CLI..."
+    curl "https://d1uj6qtbmh3dt5.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
+fi
+
 # Download the zip file from S3
 echo "Downloading zip file from S3..."
 aws s3 cp s3://$S3_BUCKET/$ZIP_FILE /tmp/$ZIP_FILE --profile $AWS_PROFILE
@@ -32,9 +41,15 @@ mkdir -p $EXTRACT_DIR
 echo "Extracting zip file..."
 unzip /tmp/$ZIP_FILE -d $EXTRACT_DIR
 
+# Verify that the HTML file exists
+if [ ! -f "$EXTRACT_DIR/$HTML_FILE" ]; then
+    echo "Error: $HTML_FILE not found in the extracted files."
+    exit 1
+fi
+
 # Update the HTML file
 echo "Updating HTML file..."
-sudo cp $EXTRACT_DIR/$HTML_FILE $NGINX_HTML_DIR/$HTML_FILE
+sudo cp -r $EXTRACT_DIR/$HTML_FILE $NGINX_HTML_DIR/$HTML_FILE
 
 # Clean up
 echo "Cleaning up temporary files..."
