@@ -17,7 +17,7 @@ pipeline {
         
         stage('Deploy to AWS') {
             steps {
-                withAWS(region: 'ap-south-1', credentials: '38767c2c-c68b-47ac-a6f1-5aa4630f8352') {
+                withAWS(region: 'ap-south-1', credentials: 'f2d27d6f-39e8-4f7c-b43c-7178ab11d6a2') {
                     s3Upload(bucket: 'dilip-bucket-14', file: 'deployment-package.zip')
                     awsCodeDeploy applicationName: 'WebAppDeployment', 
                                   deploymentGroupName: 'WebAppDeploymentGroup', 
