@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        EC2_IP = '65.2.175.87' // Replace with your EC2 instance's public IP
-        SSH_USER = 'ubuntu' // The user you use to SSH into your EC2 instance
+        EC2_IP = '65.2.175.87' 
+        SSH_USER = 'ubuntu'
     }
 
     stages {
