@@ -1,6 +1,11 @@
 #!/bin/bash
 
-# Set variable
+# Set AWS credentials (if not using IAM roles)
+export AWS_ACCESS_KEY_ID='c4de8d53-50b7-4316-87ea-203ac6bed6d1'
+export AWS_SECRET_ACCESS_KEY='7c954e56-40c1-4f61-a409-1ea8edbe667c'
+export AWS_DEFAULT_REGION="ap-south-1"
+
+# Set variables
 S3_BUCKET="dilip-bucket-14"
 ZIP_FILE="deployment-package.zip"
 EXTRACT_DIR="/tmp/deployment-package"
