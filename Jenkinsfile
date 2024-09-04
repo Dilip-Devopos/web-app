@@ -6,8 +6,8 @@ pipeline {
         S3_BUCKET = 'dilip-bucket-14'
         DEPLOYMENT_PACKAGE = 'deployment-package.zip'
         S3_OBJECT = "s3://${S3_BUCKET}/${DEPLOYMENT_PACKAGE}"
-        EC2_IP = '65.2.175.87'  // Replace with your EC2 instance's public IP
-        SSH_USER = 'ubuntu'          // Replace with your EC2 SSH username
+        EC2_IP = 'your-ec2-public-ip'  // Replace with your EC2 instance's public IP
+        SSH_USER = 'ubuntu'            // Updated SSH user
     }
 
     stages {
@@ -37,7 +37,7 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 script {
-                    // Make sure to download and set proper permissions for the key
+                    // Ensure the SSH key is properly configured
                     sh 'chmod 600 test.pem'
 
                     sh """
