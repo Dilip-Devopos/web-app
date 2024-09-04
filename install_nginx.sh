@@ -6,7 +6,6 @@ ZIP_FILE="deployment-package.zip"
 EXTRACT_DIR="/tmp/deployment-package"
 HTML_FILE="index.html"
 NGINX_HTML_DIR="/var/www/html"
-AWS_PROFILE="default"
 
 # Check if NGINX is already installed
 if systemctl status nginx &>/dev/null; then
@@ -25,7 +24,7 @@ sudo systemctl stop nginx
 if ! command -v aws &>/dev/null; then
     echo "AWS CLI not found. Installing AWS CLI..."
     sudo apt update
-    sudo apt install -y curl unzip awscli
+    sudo apt install -y curl unzip
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     unzip awscliv2.zip
     sudo ./aws/install
@@ -33,7 +32,7 @@ fi
 
 # Download the zip file from S3
 echo "Downloading zip file from S3..."
-aws s3 cp s3://$S3_BUCKET/$ZIP_FILE /tmp/$ZIP_FILE --profile $AWS_PROFILE
+aws s3 cp s3://$S3_BUCKET/$ZIP_FILE /tmp/$ZIP_FILE
 
 # Create a directory to extract the zip file
 echo "Creating directory for extracted files..."
