@@ -6,6 +6,8 @@ pipeline {
         S3_BUCKET = 'dilip-bucket-14'
         DEPLOYMENT_PACKAGE = 'deployment-package.zip'
         S3_OBJECT = "s3://${S3_BUCKET}/${DEPLOYMENT_PACKAGE}"
+        EC2_IP = '65.2.175.87'  // Replace with your EC2 instance's public IP
+        SSH_USER = 'ubuntu'          // Replace with your EC2 SSH username
     }
 
     stages {
@@ -35,10 +37,15 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 script {
+                    // Make sure to download and set proper permissions for the key
+                    sh 'chmod 600 test.pem'
+
                     sh """
-                    # Example commands to deploy using AWS CLI
-                    # Assuming you have the necessary scripts to handle deployment
-                    aws ec2 describe-instances --region ${AWS_REGION} # Replace with actual deployment commands
+                    # Upload the deployment package to EC2 instance
+                    scp -i test.pem ${DEPLOYMENT_PACKAGE} ${SSH_USER}@${EC2_IP}:~
+
+                    # Connect to the EC2 instance and run the install script
+                    ssh -i test.pem ${SSH_USER}@${EC2_IP} 'bash -s' < install_nginx.sh
                     """
                 }
             }
