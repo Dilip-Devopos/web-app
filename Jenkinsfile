@@ -1,55 +1,43 @@
 pipeline {
     agent any
 
-    environment {
-        EC2_IP = '65.2.175.87' 
-        SSH_USER = 'ubuntu'
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                // Cloning the latest code from your Git repository
-                git branch: 'main', url: 'https://github.com/Dilip-Devopos/web-app.git'// Replace with your Git repository URL
+                git branch: 'main', url: 'https://github.com/Dilip-Devopos/web-app.git'
             }
         }
 
-        stage('Install/Verify NGINX') {
+        stage('Prepare Deployment Package') {
             steps {
-                sshagent (credentials: ['ec2-ssh-credentials']) {
-                    // Check if NGINX is installed; if not, install it
-                    sh """
-                    ssh -o StrictHostKeyChecking=no ${SSH_USER}@${EC2_IP} <<EOF
-                    if ! [ -x \$(command -v nginx) ]; then
-                        sudo apt-get update
-                        sudo apt-get install nginx -y
-                    fi
-                    EOF
-                    """
-                }
+                sh 'zip -r deployment-package.zip *'
+                archiveArtifacts artifacts: 'deployment-package.zip', fingerprint: true
             }
         }
 
-        stage('Deploy Application') {
+        stage('Deploy to AWS') {
             steps {
-                sshagent (credentials: ['ec2-ssh-credentials']) {
-                    // Transfer the updated HTML file and restart NGINX
-                    sh """
-                    scp -o StrictHostKeyChecking=no index.html ${SSH_USER}@${EC2_IP}:/tmp/index.html
-                    ssh ${SSH_USER}@${EC2_IP} <<EOF
-                    sudo systemctl stop nginx
-                    sudo mv web-app/index.html /var/www/html/index.html
-                    sudo systemctl start nginx
-                    EOF
-                    """
+                withAWS(region: 'ap-south-1', credentials: '38767c2c-c68b-47ac-a6f1-5aa4630f8352') {
+                    s3Upload(bucket: 'dilip-bucket-14', file: 'deployment-package.zip')
+                    awsCodeDeploy applicationName: 'WebAppDeployment', 
+                                  deploymentGroupName: 'WebAppDeploymentGroup', 
+                                  deploymentConfigName: 'CodeDeployDefault.AllAtOnce', 
+                                  s3Location: [
+                                      bucket: 'Asia Pacific (Mumbai) ap-south-1', 
+                                      key: 'deployment-package.zip', 
+                                      bundleType: 'zip'
+                                  ]
                 }
             }
         }
     }
 
     post {
-        always {
-            cleanWs() // Clean up workspace after job completion
+        success {
+            echo 'Deployment Successful!'
+        }
+        failure {
+            echo 'Deployment Failed!'
         }
     }
 }
