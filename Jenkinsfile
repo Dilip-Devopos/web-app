@@ -50,8 +50,11 @@ pipeline {
                     # Upload the deployment package to EC2 instance
                     scp -i test.pem ${DEPLOYMENT_PACKAGE} ${SSH_USER}@${EC2_IP}:~
 
+                    # Upload the install script
+                    scp -i test.pem install_nginx.sh ${SSH_USER}@${EC2_IP}:~
+
                     # Connect to the EC2 instance and run the install script
-                    ssh -i test.pem ${SSH_USER}@${EC2_IP} 'bash -s' < install_nginx.sh
+                    ssh -i test.pem ${SSH_USER}@${EC2_IP} 'bash ~/install_nginx.sh'
                     """
                 }
             }
