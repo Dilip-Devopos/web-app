@@ -40,6 +40,9 @@ pipeline {
                     // Ensure the SSH key is properly configured
                     sh 'chmod 600 test.pem'
                     
+                    // Create the .ssh directory if it doesn't exist
+                    sh 'mkdir -p ~/.ssh'
+                    
                     // Add EC2 host key to known_hosts
                     sh "ssh-keyscan -H ${EC2_IP} >> ~/.ssh/known_hosts"
 
